@@ -27,7 +27,13 @@ module.exports = (defaults) ->
 
     actions =
       get: ->
-        if options.fetch is 'allDocs'
+        if model._id?
+          db.get model._id
+          .then (response) ->
+            options.success response
+          .catch (err) ->
+            options.error err
+        else if options.fetch is 'allDocs'
           db.allDocs
             include_docs: true
           .then (response) ->
@@ -52,7 +58,7 @@ module.exports = (defaults) ->
       post: ->
         db.post model.toJSON()
         .then (response) ->
-          model[model.idAttribute] = response.id
+          model._id = response.id
           model._rev = response.rev
           options.success model, response, options
         .catch (err) ->
