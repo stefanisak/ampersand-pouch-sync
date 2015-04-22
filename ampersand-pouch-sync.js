@@ -21,7 +21,7 @@
   settings = {
     defaults: {
       dbName: null,
-      fetch: 'allDocs'
+      query: 'allDocs'
     }
   };
 
@@ -36,14 +36,14 @@
       options = _.extend(defaults, model && model.pouch || {}, options);
       actions = {
         get: function() {
-          var query;
+          var design, query;
           if (model._id != null) {
             return db.get(model._id).then(function(response) {
               return options.success(response);
             })["catch"](function(err) {
               return options.error(err);
             });
-          } else if (options.fetch === 'allDocs') {
+          } else if (options.query === 'allDocs') {
             return db.allDocs({
               include_docs: true
             }).then(function(response) {
@@ -59,14 +59,19 @@
                 return options.error(err);
               });
             };
-            if (options.options[options.fetch].fun != null) {
-              return query(options.options[options.fetch].fun);
+            if (options.options != null) {
+              design = options.options[options.query];
+              if ((typeof design) === 'Function') {
+                return query(design);
+              } else if ((typeof design) === 'Object') {
+                if ((design.map != null) && (design.reduce != null)) {
+                  return query(design);
+                } else {
+                  throw Error('Please define a map and reduce function');
+                }
+              }
             } else {
-              return db.get(options.options[options.fetch]).then(function(response) {
-                return query(options.options[options.fetch]);
-              })["catch"](function(err) {
-                return options.error(err);
-              });
+              return query(options.query);
             }
           }
         },
@@ -99,6 +104,7 @@
       return actions[code]();
     };
     adapter.defaults = defaults;
+    adapter.pouchDB = db;
     return adapter;
   };
 

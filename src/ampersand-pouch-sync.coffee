@@ -13,7 +13,7 @@ methods =
 settings =
   defaults:
     dbName: null,
-    fetch: 'allDocs'
+    query: 'allDocs'
 
 module.exports = (defaults) ->
   defaults = defaults || {}
@@ -33,7 +33,7 @@ module.exports = (defaults) ->
             options.success response
           .catch (err) ->
             options.error err
-        else if options.fetch is 'allDocs'
+        else if options.query is 'allDocs'
           db.allDocs
             include_docs: true
           .then (response) ->
@@ -47,14 +47,17 @@ module.exports = (defaults) ->
               options.success response
             .catch (err) ->
               options.error err
-          if options.options[options.fetch].fun?
-            query options.options[options.fetch].fun
+          if options.options?
+            design = options.options[options.query]
+            if (typeof design) is 'Function'
+              query design
+            else if (typeof design) is 'Object'
+              if design.map? and design.reduce?
+                query design
+              else
+                throw Error 'Please define a map and reduce function'
           else
-            db.get options.options[options.fetch]
-            .then (response) ->
-              query options.options[options.fetch]
-            .catch (err) ->
-              options.error err
+            query options.query
       post: ->
         db.post model.toJSON()
         .then (response) ->
@@ -80,4 +83,5 @@ module.exports = (defaults) ->
     code = methods[method]
     actions[code]()
   adapter.defaults = defaults
+  adapter.pouchDB = db
   adapter
