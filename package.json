@@ -1,7 +1,7 @@
 {
   "name": "ampersand-pouch-sync",
   "version": "0.0.1",
-  "description": "",
+  "description": "Sync adapter for AmpersandJS PouchDB models/collections",
   "main": "ampersand-pouch-sync.js",
   "scripts": {
     "test": "mocha --watch --require should --ui bdd --reporter spec --compilers coffee:coffee-script/register"
@@ -12,6 +12,10 @@
     "should": "^5.2.0"
   },
   "author": "Stefan Isak",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:stefanisak/ampersand-pouch-sync.git"
+  },
   "license": "MIT",
   "dependencies": {
     "pouchdb": "^3.3.1",
