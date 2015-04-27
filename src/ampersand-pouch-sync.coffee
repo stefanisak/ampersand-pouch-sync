@@ -50,11 +50,11 @@ module.exports = (defaults) ->
               options.error err
           if options.options?
             design = options.options[options.query]
-            if (typeof design) is 'Function'
+            if (typeof design) is 'function'
               query design
-            else if (typeof design) is 'Object'
-              if design.map? and design.reduce?
-                query design
+            else if (typeof design) is 'object'
+              if design.fun?
+                query design.fun
               else
                 throw Error 'Please define a map and reduce function'
           else

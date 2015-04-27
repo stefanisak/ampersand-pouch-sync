@@ -15,8 +15,7 @@ TestCollection = PouchCollection.extend
   pouch:
     dbName: 'test_database'
     options:
-      query:
-        include_docs: true,
+      foo:
         fun:
           map: (doc) -> emit doc if doc.title is 'foo'
 
@@ -85,7 +84,7 @@ it 'should query collection', (done) ->
       collection.create bar,
         success: ->
           collection.fetch
-            fetch: 'query'
+            query: 'foo'
             success: (collection) ->
               collection.should.be.a.Object
               collection.length.should.be.exactly 1

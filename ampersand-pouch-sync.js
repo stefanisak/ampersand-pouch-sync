@@ -63,11 +63,11 @@
             };
             if (options.options != null) {
               design = options.options[options.query];
-              if ((typeof design) === 'Function') {
+              if ((typeof design) === 'function') {
                 return query(design);
-              } else if ((typeof design) === 'Object') {
-                if ((design.map != null) && (design.reduce != null)) {
-                  return query(design);
+              } else if ((typeof design) === 'object') {
+                if (design.fun != null) {
+                  return query(design.fun);
                 } else {
                   throw Error('Please define a map and reduce function');
                 }
