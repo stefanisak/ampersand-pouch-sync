@@ -10,16 +10,16 @@ methods =
   'delete': 'remove'
   'read':   'get'
 
-settings =
-  defaults:
-    dbName: null,
-    query: 'allDocs'
-
 module.exports = (defaults) ->
+  settings =
+    defaults:
+      dbName: null
+      dbOptions: {}
+      query: 'allDocs'
   defaults = defaults || {}
   defaults = _.extend settings.defaults, defaults
 
-  db = new PouchDB defaults.dbName
+  db = new PouchDB defaults.dbName, defaults.dbOptions
 
   adapter = (method, model, options) ->
     options = options || {}
@@ -42,7 +42,8 @@ module.exports = (defaults) ->
             options.error err
         else
           query = (q) ->
-            db.query q
+            db.query q,
+              include_docs: true
             .then (response) ->
               options.success response
             .catch (err) ->
