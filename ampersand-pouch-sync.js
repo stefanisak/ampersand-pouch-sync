@@ -38,16 +38,16 @@
         get: function() {
           var design, query;
           if (model._id != null) {
-            return db.get(model._id).then(function(response) {
-              return options.success(response);
+            return db.get(model._id).then(function(resp) {
+              return options.success(resp);
             })["catch"](function(err) {
               return options.error(err);
             });
           } else if (options.query === 'allDocs') {
             return db.allDocs({
               include_docs: true
-            }).then(function(response) {
-              return options.success(response);
+            }).then(function(resp) {
+              return options.success(resp);
             })["catch"](function(err) {
               return options.error(err);
             });
@@ -55,8 +55,8 @@
             query = function(q) {
               return db.query(q, {
                 include_docs: true
-              }).then(function(response) {
-                return options.success(response);
+              }).then(function(resp) {
+                return options.success(resp);
               })["catch"](function(err) {
                 return options.error(err);
               });
@@ -78,24 +78,28 @@
           }
         },
         post: function() {
-          return db.post(model.toJSON()).then(function(response) {
-            model._id = response.id;
-            model._rev = response.rev;
-            return options.success(model, response, options);
+          var body;
+          body = model.toJSON();
+          return db.post(body).then(function(resp) {
+            body._id = resp.id;
+            body._rev = resp.rev;
+            return options.success(body, resp);
           })["catch"](function(err) {
             return options.error(err);
           });
         },
         put: function() {
-          return db.put(model.toJSON(), model._id, model._rev).then(function(response) {
-            model._rev = response.rev;
-            return options.success(model, response, options);
+          var body;
+          body = model.toJSON();
+          return db.put(body, body._id, body._rev).then(function(resp) {
+            body._rev = resp.rev;
+            return options.success(body, resp);
           })["catch"](function(err) {
             return options.error(err);
           });
         },
         remove: function() {
-          return db.remove(model._id, model._rev).then(function(response) {
+          return db.remove(model._id, model._rev).then(function(resp) {
             return options.success();
           })["catch"](function(err) {
             return options.error(err);

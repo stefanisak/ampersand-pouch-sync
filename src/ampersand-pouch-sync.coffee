@@ -29,23 +29,23 @@ module.exports = (defaults) ->
       get: ->
         if model._id?
           db.get model._id
-          .then (response) ->
-            options.success response
+          .then (resp) ->
+            options.success resp
           .catch (err) ->
             options.error err
         else if options.query is 'allDocs'
           db.allDocs
             include_docs: true
-          .then (response) ->
-            options.success response
+          .then (resp) ->
+            options.success resp
           .catch (err) ->
             options.error err
         else
           query = (q) ->
             db.query q,
               include_docs: true
-            .then (response) ->
-              options.success response
+            .then (resp) ->
+              options.success resp
             .catch (err) ->
               options.error err
           if options.options?
@@ -60,23 +60,25 @@ module.exports = (defaults) ->
           else
             query options.query
       post: ->
-        db.post model.toJSON()
-        .then (response) ->
-          model._id = response.id
-          model._rev = response.rev
-          options.success model, response, options
+        body = model.toJSON()
+        db.post body
+        .then (resp) ->
+          body._id = resp.id
+          body._rev = resp.rev
+          options.success body, resp
         .catch (err) ->
           options.error err
       put: ->
-        db.put model.toJSON(), model._id, model._rev 
-        .then (response) ->
-          model._rev = response.rev
-          options.success model, response, options
+        body = model.toJSON()
+        db.put body, body._id, body._rev
+        .then (resp) ->
+          body._rev = resp.rev
+          options.success body, resp
         .catch (err) ->
           options.error err
       remove: ->
         db.remove model._id, model._rev 
-        .then (response) ->
+        .then (resp) ->
           options.success()
         .catch (err) ->
           options.error err

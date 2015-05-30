@@ -26,7 +26,6 @@ it 'should create model', (done) ->
   model.save null,
     success: (model) ->
       model.should.be.a.Object
-      model.should.have.a.property model.idAttribute
       model.should.have.a.property 'title'
         .and.be.exactly title
       done()
@@ -37,16 +36,11 @@ it 'should update model', (done) ->
   model.should.not.have.a.property '_rev'
   model.save null,
     success: (model) ->
-      model.should.have.a.property '_rev'
       changedTitle = 'am i changed?'
-      rev = model._rev
       model.title = changedTitle 
       model.save null,
         success: (model) ->
           model.should.be.a.Object
-          model.should.have.a.property model.idAttribute
-          model.should.have.a.property '_rev'
-          model._rev.should.not.be.equal rev
           model.should.have.a.property 'title'
             .and.be.exactly changedTitle
           done()
