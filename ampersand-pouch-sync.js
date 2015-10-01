@@ -41,7 +41,11 @@
             return db.get(model._id).then(function(resp) {
               return options.success(resp);
             })["catch"](function(err) {
-              return options.error(err);
+              if ((options != null ? options.err : void 0) != null) {
+                return options.error(err);
+              } else {
+                throw err;
+              }
             });
           } else if (options.query === 'allDocs') {
             return db.allDocs({
@@ -49,7 +53,11 @@
             }).then(function(resp) {
               return options.success(resp);
             })["catch"](function(err) {
-              return options.error(err);
+              if ((options != null ? options.err : void 0) != null) {
+                return options.error(err);
+              } else {
+                throw err;
+              }
             });
           } else {
             query = function(q) {
@@ -58,7 +66,11 @@
               }).then(function(resp) {
                 return options.success(resp);
               })["catch"](function(err) {
-                return options.error(err);
+                if ((options != null ? options.err : void 0) != null) {
+                  return options.error(err);
+                } else {
+                  throw err;
+                }
               });
             };
             if (options.options != null) {
@@ -85,7 +97,11 @@
             body._rev = resp.rev;
             return options.success(body, resp);
           })["catch"](function(err) {
-            return options.error(err);
+            if ((options != null ? options.err : void 0) != null) {
+              return options.error(err);
+            } else {
+              throw err;
+            }
           });
         },
         put: function() {
@@ -95,14 +111,22 @@
             body._rev = resp.rev;
             return options.success(body, resp);
           })["catch"](function(err) {
-            return options.error(err);
+            if ((options != null ? options.err : void 0) != null) {
+              return options.error(err);
+            } else {
+              throw err;
+            }
           });
         },
         remove: function() {
           return db.remove(model._id, model._rev).then(function(resp) {
             return options.success();
           })["catch"](function(err) {
-            return options.error(err);
+            if ((options != null ? options.err : void 0) != null) {
+              return options.error(err);
+            } else {
+              throw err;
+            }
           });
         }
       };

@@ -32,14 +32,16 @@ module.exports = (defaults) ->
           .then (resp) ->
             options.success resp
           .catch (err) ->
-            options.error err
+            if options?.err? then options.error err
+            else throw err
         else if options.query is 'allDocs'
           db.allDocs
             include_docs: true
           .then (resp) ->
             options.success resp
           .catch (err) ->
-            options.error err
+            if options?.err? then options.error err
+            else throw err
         else
           query = (q) ->
             db.query q,
@@ -47,7 +49,8 @@ module.exports = (defaults) ->
             .then (resp) ->
               options.success resp
             .catch (err) ->
-              options.error err
+              if options?.err? then options.error err
+              else throw err
           if options.options?
             design = options.options[options.query]
             if (typeof design) is 'function'
@@ -67,7 +70,8 @@ module.exports = (defaults) ->
           body._rev = resp.rev
           options.success body, resp
         .catch (err) ->
-          options.error err
+          if options?.err? then options.error err
+          else throw err
       put: ->
         body = model.toJSON()
         db.put body, body._id, body._rev
@@ -75,13 +79,15 @@ module.exports = (defaults) ->
           body._rev = resp.rev
           options.success body, resp
         .catch (err) ->
-          options.error err
+          if options?.err? then options.error err
+          else throw err
       remove: ->
         db.remove model._id, model._rev 
         .then (resp) ->
           options.success()
         .catch (err) ->
-          options.error err
+          if options?.err? then options.error err
+          else throw err
 
     code = methods[method]
     actions[code]()
