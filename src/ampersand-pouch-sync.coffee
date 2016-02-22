@@ -32,7 +32,7 @@ module.exports = (defaults) ->
           .then (resp) ->
             options.success resp
           .catch (err) ->
-            if options?.err? then options.error err
+            if options?.error? then options.error err
             else throw err
         else if options.query is 'allDocs'
           db.allDocs
@@ -40,7 +40,7 @@ module.exports = (defaults) ->
           .then (resp) ->
             options.success resp
           .catch (err) ->
-            if options?.err? then options.error err
+            if options?.error? then options.error err
             else throw err
         else
           query = (q) ->
@@ -49,7 +49,7 @@ module.exports = (defaults) ->
             .then (resp) ->
               options.success resp
             .catch (err) ->
-              if options?.err? then options.error err
+              if options?.error? then options.error err
               else throw err
           if options.options?
             design = options.options[options.query]
@@ -66,11 +66,13 @@ module.exports = (defaults) ->
         body = model.toJSON()
         db.post body
         .then (resp) ->
+          console.log 'asdf', resp
           body._id = resp.id
           body._rev = resp.rev
           options.success body, resp
         .catch (err) ->
-          if options?.err? then options.error err
+          console.log 'error 123', err
+          if options?.error? then options.error err
           else throw err
       put: ->
         body = model.toJSON()
@@ -79,14 +81,14 @@ module.exports = (defaults) ->
           body._rev = resp.rev
           options.success body, resp
         .catch (err) ->
-          if options?.err? then options.error err
+          if options?.error? then options.error err
           else throw err
       remove: ->
-        db.remove model._id, model._rev 
+        db.remove model._id, model._rev
         .then (resp) ->
           options.success()
         .catch (err) ->
-          if options?.err? then options.error err
+          if options?.error? then options.error err
           else throw err
 
     code = methods[method]

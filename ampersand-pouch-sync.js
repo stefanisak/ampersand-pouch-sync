@@ -41,7 +41,7 @@
             return db.get(model._id).then(function(resp) {
               return options.success(resp);
             })["catch"](function(err) {
-              if ((options != null ? options.err : void 0) != null) {
+              if ((options != null ? options.error : void 0) != null) {
                 return options.error(err);
               } else {
                 throw err;
@@ -53,7 +53,7 @@
             }).then(function(resp) {
               return options.success(resp);
             })["catch"](function(err) {
-              if ((options != null ? options.err : void 0) != null) {
+              if ((options != null ? options.error : void 0) != null) {
                 return options.error(err);
               } else {
                 throw err;
@@ -66,7 +66,7 @@
               }).then(function(resp) {
                 return options.success(resp);
               })["catch"](function(err) {
-                if ((options != null ? options.err : void 0) != null) {
+                if ((options != null ? options.error : void 0) != null) {
                   return options.error(err);
                 } else {
                   throw err;
@@ -97,7 +97,7 @@
             body._rev = resp.rev;
             return options.success(body, resp);
           })["catch"](function(err) {
-            if ((options != null ? options.err : void 0) != null) {
+            if ((options != null ? options.error : void 0) != null) {
               return options.error(err);
             } else {
               throw err;
@@ -111,7 +111,7 @@
             body._rev = resp.rev;
             return options.success(body, resp);
           })["catch"](function(err) {
-            if ((options != null ? options.err : void 0) != null) {
+            if ((options != null ? options.error : void 0) != null) {
               return options.error(err);
             } else {
               throw err;
@@ -122,7 +122,7 @@
           return db.remove(model._id, model._rev).then(function(resp) {
             return options.success();
           })["catch"](function(err) {
-            if ((options != null ? options.err : void 0) != null) {
+            if ((options != null ? options.error : void 0) != null) {
               return options.error(err);
             } else {
               throw err;
