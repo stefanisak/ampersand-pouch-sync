@@ -74,11 +74,7 @@ module.exports = (defaults) ->
           else throw err
       put: ->
         body = model.toJSON()
-        params =
-          _id: body._id
-          _rev: body._rev
-          data: body
-        db.put params
+        db.put body
         .then (resp) ->
           body._rev = resp.rev
           options.success body, resp
