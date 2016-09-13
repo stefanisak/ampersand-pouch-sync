@@ -66,12 +66,10 @@ module.exports = (defaults) ->
         body = model.toJSON()
         db.post body
         .then (resp) ->
-          console.log 'asdf', resp
           body._id = resp.id
           body._rev = resp.rev
           options.success body, resp
         .catch (err) ->
-          console.log 'error 123', err
           if options?.error? then options.error err
           else throw err
       put: ->
