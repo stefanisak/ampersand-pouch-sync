@@ -105,9 +105,14 @@
           });
         },
         put: function() {
-          var body;
+          var body, params;
           body = model.toJSON();
-          return db.put(body, body._id, body._rev).then(function(resp) {
+          params = {
+            _id: body._id,
+            _rev: body._rev,
+            data: body
+          };
+          return db.put(params).then(function(resp) {
             body._rev = resp.rev;
             return options.success(body, resp);
           })["catch"](function(err) {
